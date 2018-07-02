@@ -97,15 +97,13 @@ class NotesListVC: UITableViewController {
         
         if (segue.identifier == "ShowNoteAdd") {
             destinationSegue.isEditing = false
-            destinationSegue.noteName = ""
-            destinationSegue.noteText = ""
         }
         else {
             let sourceItem = tableView.indexPathForSelectedRow?.row
             
             destinationSegue.isEditing = true
-            destinationSegue.noteName = notes[sourceItem!].name
-            destinationSegue.noteText = notes[sourceItem!].noteText
+            destinationSegue.noteName = notes[sourceItem!].name!
+            destinationSegue.noteText = notes[sourceItem!].noteText!
         }
     }
 }

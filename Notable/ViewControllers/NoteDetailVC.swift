@@ -9,8 +9,8 @@
 import UIKit
 
 class NoteDetailVC: UIViewController {
-    var noteName: String?
-    var noteText: String?
+    var noteName: String = ""
+    var noteText: String = ""
     
     @IBOutlet weak var noteNameCtl: UITextField!
     @IBOutlet weak var noteTextCtl: UITextView!
@@ -35,12 +35,7 @@ class NoteDetailVC: UIViewController {
             self.present(alert, animated: true, completion: nil)
         }
         else {
-            if (self.isEditing){
-                performSegue(withIdentifier: "EditItem", sender: nil)
-            }
-            else {
-                performSegue(withIdentifier: "AddItem", sender: nil)
-            }
+            performSegue(withIdentifier: self.isEditing ? "EditItem" : "AddItem", sender: nil)
         }
     }
 }

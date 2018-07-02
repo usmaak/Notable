@@ -11,10 +11,10 @@
 		54009D0D20E8437800295C28 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54009D0C20E8437800295C28 /* AppDelegate.swift */; };
 		54009D0F20E8437800295C28 /* NoteDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54009D0E20E8437800295C28 /* NoteDetailVC.swift */; };
 		54009D1220E8437800295C28 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 54009D1020E8437800295C28 /* Main.storyboard */; };
-		54009D1520E8437800295C28 /* Notable.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 54009D1320E8437800295C28 /* Notable.xcdatamodeld */; };
 		54009D1720E8437900295C28 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54009D1620E8437900295C28 /* Assets.xcassets */; };
 		54009D1A20E8437900295C28 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 54009D1820E8437900295C28 /* LaunchScreen.storyboard */; };
 		54009D2420E846C100295C28 /* NotesListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54009D2320E846C100295C28 /* NotesListVC.swift */; };
+		54BB8FE620E9E7260062156D /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BB8FE520E9E7260062156D /* Note.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,11 +22,11 @@
 		54009D0C20E8437800295C28 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		54009D0E20E8437800295C28 /* NoteDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDetailVC.swift; sourceTree = "<group>"; };
 		54009D1120E8437800295C28 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		54009D1420E8437800295C28 /* Notable.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Notable.xcdatamodel; sourceTree = "<group>"; };
 		54009D1620E8437900295C28 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		54009D1920E8437900295C28 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		54009D1B20E8437900295C28 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		54009D2320E846C100295C28 /* NotesListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesListVC.swift; sourceTree = "<group>"; };
+		54BB8FE520E9E7260062156D /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		57460BBE1DEE4DF55794AA1A /* Pods-Notable.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Notable.release.xcconfig"; path = "Pods/Target Support Files/Pods-Notable/Pods-Notable.release.xcconfig"; sourceTree = "<group>"; };
 		73A5687F4F5D9AE8566C5D7B /* Pods-Notable.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Notable.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Notable/Pods-Notable.debug.xcconfig"; sourceTree = "<group>"; };
 		8A1252412B86A9878228D947 /* Pods_Notable.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Notable.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -104,7 +104,7 @@
 		54BB8FE420E9E63C0062156D /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				54009D1320E8437800295C28 /* Notable.xcdatamodeld */,
+				54BB8FE520E9E7260062156D /* Note.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -232,7 +232,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				54009D1520E8437800295C28 /* Notable.xcdatamodeld in Sources */,
+				54BB8FE620E9E7260062156D /* Note.swift in Sources */,
 				54009D0F20E8437800295C28 /* NoteDetailVC.swift in Sources */,
 				54009D2420E846C100295C28 /* NotesListVC.swift in Sources */,
 				54009D0D20E8437800295C28 /* AppDelegate.swift in Sources */,
@@ -435,19 +435,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		54009D1320E8437800295C28 /* Notable.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				54009D1420E8437800295C28 /* Notable.xcdatamodel */,
-			);
-			currentVersion = 54009D1420E8437800295C28 /* Notable.xcdatamodel */;
-			path = Notable.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 54009D0120E8437800295C28 /* Project object */;
 }

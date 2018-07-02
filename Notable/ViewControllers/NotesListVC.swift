@@ -7,11 +7,11 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class NotesListVC: UITableViewController {
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var notes = [Note]()
+    var notes: Results<Note>?
+    var realm = try! Realm()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,32 +27,28 @@ class NotesListVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return notes.count
+        return notes!.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NoteCell", for: indexPath)
 
-        cell.textLabel?.text = notes[indexPath.row].name
+        cell.textLabel?.text = notes![indexPath.row].name
         
         return cell
     }
 
     // MARK: - Data Manipulation Methods
-    func loadNotes(with request: NSFetchRequest<Note> = Note.fetchRequest()) {
-        do {
-            notes = try context.fetch(request)
-        }
-        catch {
-            print ("Error fetching notes \(error)")
-        }
-        
+    func loadNotes() {
+        notes = realm.objects(Note.self)
         tableView.reloadData()
     }
     
-    func saveNotes() {
+    func saveNotes(note: Note) {
         do {
-            try context.save()
+            try realm.write {
+                realm.add(note)
+            }
         }
         catch {
             print ("Error saving notes \(error)")
@@ -66,13 +62,14 @@ class NotesListVC: UITableViewController {
         let sourceSegue = segue.source as! NoteDetailVC
         
         //Add item to database
-        let newNote = Note(context: context)
+        let newNote = Note()
         
         newNote.name = sourceSegue.noteNameCtl.text!
         newNote.noteText = sourceSegue.noteTextCtl.text!
-        notes.append(newNote)
+        newNote.dateCreated = Date()
+        newNote.dateLastUpdated = Date()
         
-        saveNotes()
+        saveNotes(note: newNote)
     }
     
     @IBAction func didEditItem(segue: UIStoryboardSegue) {
@@ -80,10 +77,16 @@ class NotesListVC: UITableViewController {
         
         //Edit item in database
         if let item = tableView.indexPathForSelectedRow?.row {
-            notes[item].name = sourceSegue.noteNameCtl.text!
-            notes[item].noteText = sourceSegue.noteTextCtl.text!
-            
-            saveNotes()
+            do {
+                try realm.write {
+                    notes![item].name = sourceSegue.noteNameCtl.text!
+                    notes![item].noteText = sourceSegue.noteTextCtl.text!
+                    notes![item].dateLastUpdated = Date()
+                }
+            }
+            catch {
+                print ("Error saving update \(error)")
+            }
         }
     }
     
@@ -102,18 +105,17 @@ class NotesListVC: UITableViewController {
             let sourceItem = tableView.indexPathForSelectedRow?.row
             
             destinationSegue.isEditing = true
-            destinationSegue.noteName = notes[sourceItem!].name!
-            destinationSegue.noteText = notes[sourceItem!].noteText!
+            destinationSegue.noteName = notes![sourceItem!].name
+            destinationSegue.noteText = notes![sourceItem!].noteText
         }
     }
 }
 
 extension NotesListVC : UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        let request: NSFetchRequest<Note> = Note.fetchRequest()
+        notes = notes?.filter("name CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "name", ascending: true)
         
-        request.predicate = NSPredicate(format: "name CONTAINS[cd] %@", searchBar.text!)
-        loadNotes(with: request)
+        tableView.reloadData()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

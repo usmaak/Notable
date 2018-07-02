@@ -65,29 +65,37 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Note Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OHZ-8s-Wd7">
-                                <rect key="frame" x="16" y="72" width="87" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Note Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OHZ-8s-Wd7">
+                                <rect key="frame" x="16" y="72" width="90.5" height="23.5"/>
+                                <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BEj-io-AAX">
-                                <rect key="frame" x="16" y="101" width="343" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="BEj-io-AAX">
+                                <rect key="frame" x="16" y="103.5" width="343" height="30"/>
                                 <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="17"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="StC-np-IwW">
-                                <rect key="frame" x="16" y="139" width="343" height="508"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="StC-np-IwW">
+                                <rect key="frame" x="16" y="141.5" width="343" height="505.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="StC-np-IwW" firstAttribute="top" secondItem="BEj-io-AAX" secondAttribute="bottom" constant="8" id="Cm8-U7-TOL"/>
+                            <constraint firstItem="BEj-io-AAX" firstAttribute="leading" secondItem="hBL-CV-kHF" secondAttribute="leading" constant="16" id="HVx-w9-7Rq"/>
+                            <constraint firstItem="hBL-CV-kHF" firstAttribute="bottom" secondItem="StC-np-IwW" secondAttribute="bottom" constant="20" id="K9e-83-00O"/>
+                            <constraint firstItem="StC-np-IwW" firstAttribute="leading" secondItem="hBL-CV-kHF" secondAttribute="leading" constant="16" id="PnQ-pX-pqK"/>
+                            <constraint firstItem="hBL-CV-kHF" firstAttribute="trailing" secondItem="StC-np-IwW" secondAttribute="trailing" constant="16" id="WiW-m3-LcM"/>
+                            <constraint firstItem="OHZ-8s-Wd7" firstAttribute="leading" secondItem="hBL-CV-kHF" secondAttribute="leading" constant="16" id="apV-FW-ID4"/>
+                            <constraint firstItem="OHZ-8s-Wd7" firstAttribute="top" secondItem="hBL-CV-kHF" secondAttribute="top" constant="8" id="q9W-ue-EYc"/>
+                            <constraint firstItem="hBL-CV-kHF" firstAttribute="trailing" secondItem="BEj-io-AAX" secondAttribute="trailing" constant="16" id="tBG-LJ-F7D"/>
+                            <constraint firstItem="BEj-io-AAX" firstAttribute="top" secondItem="OHZ-8s-Wd7" secondAttribute="bottom" constant="8" id="wQT-Zq-Y9E"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="hBL-CV-kHF"/>
                     </view>
                     <navigationItem key="navigationItem" title="Note" id="dkJ-Yl-Yoh">
@@ -126,6 +134,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <textAttributes key="titleTextAttributes">
+                            <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="17"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
                     </navigationBar>

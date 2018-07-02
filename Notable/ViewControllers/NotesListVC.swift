@@ -5,17 +5,31 @@
 //  Created by Scott Kilbourn on 6/30/18.
 //  Copyright © 2018 Scott Kilbourn. All rights reserved.
 //
+//  This is a sample of how to use NSFetchedResultsController to manage table data automatically.
 
 import UIKit
 import CoreData
 
-class NotesListVC: UITableViewController {
+class NotesListVC: UITableViewController, NSFetchedResultsControllerDelegate {
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var notes = [Note]()
+    var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadNotes()
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Note")
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(key: "name", ascending: true)]
+        
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController.delegate = self
+    
+        do {
+            try fetchedResultsController.performFetch()
+        }
+        catch {
+            print ("Error fetching data \(error)")
+        }
     }
 
     // MARK: - Table view data source
@@ -27,41 +41,70 @@ class NotesListVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return notes.count
+        return (fetchedResultsController.sections?[section].numberOfObjects) ?? 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NoteCell", for: indexPath)
-
-        cell.textLabel?.text = notes[indexPath.row].name
+        let note = fetchedResultsController.object(at: indexPath) as! Note
+        
+        cell.textLabel?.text = note.name
         
         return cell
     }
 
-    // MARK: - Data Manipulation Methods
-    func loadNotes(with request: NSFetchRequest<Note> = Note.fetchRequest()) {
-        do {
-            notes = try context.fetch(request)
-        }
-        catch {
-            print ("Error fetching notes \(error)")
-        }
-        
-        tableView.reloadData()
+    // MARK: - nsFetchedResultsController Methods
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.endUpdates()
     }
     
-    func saveNotes() {
-        do {
-            try context.save()
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.beginUpdates()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch (type) {
+        case .insert:
+            if let indexPath = newIndexPath {
+                tableView.insertRows(at: [indexPath], with: .fade)
+            }
+            break;
+        case .delete:
+            if let indexPath = indexPath {
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+            break;
+        case .update:
+            if let indexPath = indexPath {
+                let cell = tableView.cellForRow(at: indexPath)
+                configureCell(cell: cell!, atIndexPath: indexPath)
+            }
+            break;
+        case .move:
+            if let indexPath = indexPath {
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+            
+            if let newIndexPath = newIndexPath {
+                tableView.insertRows(at: [newIndexPath], with: .fade)
+            }
+            break;
         }
-        catch {
-            print ("Error saving notes \(error)")
+    }
+
+    func configureCell(cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
+        let record = fetchedResultsController.object(at: indexPath) as! Note
+        
+        // Update Cell
+        if let name = record.name {
+            cell.textLabel?.text = name
         }
         
-        tableView.reloadData()
     }
     
     // MARK: - Return Segues
+
     @IBAction func didAddItem(segue: UIStoryboardSegue) {
         let sourceSegue = segue.source as! NoteDetailVC
         
@@ -70,20 +113,29 @@ class NotesListVC: UITableViewController {
         
         newNote.name = sourceSegue.noteNameCtl.text!
         newNote.noteText = sourceSegue.noteTextCtl.text!
-        notes.append(newNote)
-        
-        saveNotes()
+        fetchedResultsController.managedObjectContext.insert(newNote)
+        saveData()
     }
     
     @IBAction func didEditItem(segue: UIStoryboardSegue) {
         let sourceSegue = segue.source as! NoteDetailVC
         
         //Edit item in database
-        if let item = tableView.indexPathForSelectedRow?.row {
-            notes[item].name = sourceSegue.noteNameCtl.text!
-            notes[item].noteText = sourceSegue.noteTextCtl.text!
-            
-            saveNotes()
+        if let item = tableView.indexPathForSelectedRow {
+            let note = fetchedResultsController.object(at: item) as! Note
+            note.name = sourceSegue.noteNameCtl.text!
+            note.noteText = sourceSegue.noteTextCtl.text!
+            saveData()
+        }
+    }
+    
+    //MARK: - Data Methods
+    func saveData() {
+        do {
+            try fetchedResultsController.managedObjectContext.save()
+        }
+        catch {
+            print ("Error saving note \(error)")
         }
     }
     
@@ -101,30 +153,45 @@ class NotesListVC: UITableViewController {
             destinationSegue.noteText = ""
         }
         else {
-            let sourceItem = tableView.indexPathForSelectedRow?.row
-            
-            destinationSegue.isEditing = true
-            destinationSegue.noteName = notes[sourceItem!].name
-            destinationSegue.noteText = notes[sourceItem!].noteText
+            if let sourceItem = tableView.indexPathForSelectedRow {
+                let note = fetchedResultsController.object(at: sourceItem) as! Note
+                destinationSegue.isEditing = true
+                destinationSegue.noteName = note.name
+                destinationSegue.noteText = note.noteText
+            }
         }
     }
 }
 
 extension NotesListVC : UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        let request: NSFetchRequest<Note> = Note.fetchRequest()
+        let predicate = NSPredicate(format: "name CONTAINS[cd] %@", searchBar.text!)
+
+        fetchedResultsController.fetchRequest.predicate = predicate
         
-        request.predicate = NSPredicate(format: "name CONTAINS[cd] %@", searchBar.text!)
-        loadNotes(with: request)
+        ReloadDataFromSearchBar()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text?.count == 0 {
-            loadNotes()
+            fetchedResultsController.fetchRequest.predicate = nil
+            
+            ReloadDataFromSearchBar()
             
             DispatchQueue.main.async {
                 searchBar.resignFirstResponder()
             }
         }
+    }
+    
+    private func ReloadDataFromSearchBar() {
+        do {
+            try fetchedResultsController.performFetch()
+        }
+        catch {
+            print ("Error fetching results for search bar \(error)")
+        }
+        
+        tableView.reloadData()
     }
 }
